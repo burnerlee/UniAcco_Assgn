@@ -1,0 +1,11 @@
+<center>
+    <form method="post" action={% url 'checkUser' %}>
+    {% csrf_token %}
+    <br><br><br>
+    <input type = "email" name = "email" placeholder = "Enter Your Email" required><br><br>
+    <input type = "password" name = "password" placeholder = "Enter Your Password" required><br><br>
+    <button type = "submit">Login</button>
+    </form>
+    Don't Have an account?<br><br>
+    <a href="{% url 'signup'%}"><button>SignUp</button></a>
+    <center>
