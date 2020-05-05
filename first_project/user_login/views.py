@@ -5,11 +5,14 @@ import requests
 import socket
 
 def index(request):
-    return render(request,'user_login/login.html',{})  
+    return render(request,'user_login/login.html',{})                   #renders the login page.
 
 def signup(request):
-    return render(request,'user_login/signup.html',{})
+    return render(request,'user_login/signup.html',{})                  #renders the signup page.
 
+#createUser uses the POST data to create a new user and saves it in the database.
+#Checks if the user with same email already exists.
+#Redirect to login page after successful signup.
 def createUser(request):
     name = request.POST['name']
     email = request.POST['email']
@@ -21,6 +24,7 @@ def createUser(request):
         newUser.save()
         return HttpResponseRedirect('/user_login') 
 
+#checkUser validates the Credentials of the user, authorizes access by session variable.
 def checkUser(request):
     email = request.POST['email']
     password = request.POST['password']
@@ -35,6 +39,8 @@ def checkUser(request):
     else:
         return HttpResponse("User with email %s does not exist. Please signup" % email)
 
+#userDetails displays the details of the user requested.
+#it sends a webhook to the specified address.
 def userDetails(request,id):
     authenticate = "auth_user_" + str(id)
     try:
@@ -45,12 +51,12 @@ def userDetails(request,id):
         return HttpResponse("You are not authorized to access this resource")
     user = User.objects.get(id=id)
     hostname = socket.gethostname()    
-    IPAddr = socket.gethostbyname(hostname) 
+    IPAddr = socket.gethostbyname(hostname)                                 #IP Address of the server.
     data = {
         'user':id,
         'ip_address': IPAddr 
     }
-    requests.post("https://encrusxqoan0b.x.pipedream.net/",data = data)
+    requests.post("https://encrusxqoan0b.x.pipedream.net/",data = data)     #Webook sent.
     context = {
         'name' : user.name,
         'email' : user.email,

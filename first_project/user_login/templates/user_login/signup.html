@@ -1,5 +1,6 @@
 <center>
 <form method="post" action={% url 'createUser' %}>
+    <!-- form to get data from the user for signup -->
 {% csrf_token %}
 <input type = "text" name = "name" placeholder = "Enter your name" required><br><br>
 <input type = "email" name = "email" placeholder = "Enter Your Email" required><br><br>
