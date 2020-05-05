@@ -29,11 +29,20 @@ def checkUser(request):
             user = User.objects.get(email=email,password=password)
         except User.DoesNotExist:
             return HttpResponse("Incorrect password.")
+        authenticate = "auth_user_" + str(user.id)
+        request.session[authenticate] = True
         return HttpResponseRedirect("userDetails/%s" % user.id)
     else:
         return HttpResponse("User with email %s does not exist. Please signup" % email)
 
 def userDetails(request,id):
+    authenticate = "auth_user_" + str(id)
+    try:
+        is_authorized = request.session[authenticate]
+        if not is_authorized:
+            return HttpResponse("You are not authorized to access this resource")
+    except:
+        return HttpResponse("You are not authorized to access this resource")
     user = User.objects.get(id=id)
     hostname = socket.gethostname()    
     IPAddr = socket.gethostbyname(hostname) 
